@@ -7,7 +7,9 @@ import { TypeOrmConfigService } from './config/typeorm-config.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Load .env variables
+    ConfigModule.forRoot({
+      isGlobal: true
+    }), // Load .env variables
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService, // Use the separate TypeORM config service
     }),
