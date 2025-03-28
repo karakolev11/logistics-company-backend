@@ -2,7 +2,6 @@ import { UserEntity } from "src/modules/users/entities/user.entity";
 import { BaseEntity } from "src/modules/common/entities/base.entity";
 import { Column, Entity, OneToMany } from "typeorm";
 
-
 @Entity({name:"office"})
 export class Office extends BaseEntity{
     @Column({

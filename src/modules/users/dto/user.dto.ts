@@ -1,36 +1,41 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional } from "class-validator";
-import { UserRole } from "../enum/user-role.enum";
-
-export class CreateUserDto {
-    
+import {
+    IsEmail,
+    IsEnum,
+    IsNotEmpty,
+    IsOptional,
+    IsNumber,
+    ValidateIf
+  } from 'class-validator';
+  import { UserRole } from '../enum/user-role.enum';
+  
+  export class CreateUserDto {
     @IsNotEmpty()
     public username: string;
-
+  
     @IsEmail()
     public email: string;
-
+  
     @IsNotEmpty()
     public password: string;
-
+  
     @IsOptional()
     public firstName?: string;
-
+  
     @IsOptional()
     public lastName?: string;
-
+  
     @IsOptional()
     public phoneNumber?: string;
-
+  
     @IsEnum(UserRole)
     public role: UserRole;
-
-}
-
-export class UpdateUserDto { 
-
-    @IsNotEmpty()
-    public id: number;
-
+  
+    @ValidateIf((dto: CreateUserDto) => dto.role !== UserRole.CLIENT)
+    @IsNumber()
+    public officeId?: number;
+  }
+  
+  export class UpdateUserDto {
     @IsOptional()
     public username?: string;
   
@@ -53,5 +58,10 @@ export class UpdateUserDto {
     @IsOptional()
     @IsEnum(UserRole)
     public role?: UserRole;
-}
-
+  
+    @ValidateIf((dto: UpdateUserDto) => dto.role !== UserRole.CLIENT)
+    @IsNumber()
+    @IsOptional()
+    public officeId?: number;
+  }
+  

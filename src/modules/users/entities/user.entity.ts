@@ -1,69 +1,79 @@
 import { BaseEntity } from "src/modules/common/entities/base.entity";
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { UserRole } from "../enum/user-role.enum";
 import { Office } from "src/modules/offices/entities/office.entity";
+import { Shipment } from "src/modules/shipments/entities/shipments.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
 
     @Column({
-        name: 'username', 
+        name: 'username',
         unique: true,
         type: 'varchar',
         length: 20,
         nullable: false
     })
-    public username: string; 
+    public username: string;
 
-    @Column({ 
+    @Column({
         name: 'password',
         type: 'varchar',
         length: 20,
         nullable: false
     })
-    public password: string; 
+    public password: string;
 
-    @Column({ 
+    @Column({
         name: 'email',
         unique: true,
         type: 'varchar',
         length: 20,
         nullable: false
     })
-    public email: string; // Unique email
+    public email: string;
 
-    @Column({ 
+    @Column({
         name: 'first_name',
         nullable: true,
         type: 'varchar',
         length: 20,
     })
-    public firstName: string; // First name of the user
+    public firstName: string;
 
-    @Column({ 
+    @Column({
         name: 'last_name',
         nullable: true,
         type: 'varchar',
         length: 20,
     })
-    public lastName: string; // Last name of the user
-    
-    @Column({ 
+    public lastName: string;
+
+    @Column({
         name: 'phone_number',
         nullable: true,
         type: 'varchar',
         length: 20,
     })
-    public phoneNumber: string; 
+    public phoneNumber: string;
 
     @Column({
         type: 'enum',
         enum: UserRole,
         nullable: false
-      })
-    public role: UserRole; // User's role (e.g., 'client', 'employee', 'admin')
+    })
+    public role: UserRole;
 
     @ManyToOne(() => Office, office => office.employees, { nullable: true })
-    @JoinColumn({ name: "office_id" }) 
+    @JoinColumn({ name: "office_id" })
     public office?: Office;
+
+    @OneToMany(() => Shipment, shipment => shipment.sender)
+    public shipmentsSent: Shipment[];
+
+    @OneToMany(() => Shipment, shipment => shipment.receiver)
+    public shipmentsReceived: Shipment[];
+
+    @OneToMany(() => Shipment, shipment => shipment.courier)
+    public shipmentsDelivered: Shipment[];
 }
