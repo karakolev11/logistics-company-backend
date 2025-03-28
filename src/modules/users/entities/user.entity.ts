@@ -1,6 +1,7 @@
 import { BaseEntity } from "src/modules/common/entities/base.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { UserRole } from "../enum/user-role.enum";
+import { Office } from "src/modules/offices/entities/office.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
@@ -62,4 +63,7 @@ export class UserEntity extends BaseEntity {
       })
     public role: UserRole; // User's role (e.g., 'client', 'employee', 'admin')
 
+    @ManyToOne(() => Office, office => office.employees, { nullable: true })
+    @JoinColumn({ name: "office_id" }) 
+    public office?: Office;
 }
